@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect, useCallback } from 'react';
 import styles from './app.module.css'
 import VideoList from './component/video_list/Video_list';
 import SearchHeader from './component/search_header/search_header';
@@ -12,17 +12,18 @@ function App({youtube}) {
     setSelectedVideo(video);
   };
 
-  const search = query => {
-    setSelectedVideo(null);
-    youtube 
-    .search(query) //
-    .then(videos => setVideos(videos));
-  }
+  // useCallback은 메모리에 계속 보관이 되기 때문에 많은 영향을 줄 수 있다. 그러므로 조심해서 사용하는게 좋다.
+  const search = useCallback( query => {
+      setSelectedVideo(null);
+      youtube 
+      .search(query) //
+      .then(videos => setVideos(videos));
+    },[youtube]);
 
   useEffect(() => {
     youtube.mostPopular() //
     .then(videos => setVideos(videos));
-  },[]);
+  },[youtube]);
 
 
   return (
