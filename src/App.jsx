@@ -13,6 +13,7 @@ function App({youtube}) {
   };
 
   const search = query => {
+    setSelectedVideo(null);
     youtube 
     .search(query) //
     .then(videos => setVideos(videos));
@@ -28,12 +29,14 @@ function App({youtube}) {
     <div className={styles.app}>
       <SearchHeader onSearch={search} />
       <section className={styles.content} >
+
       {/* 선택된것이 있으면 div안에 내용이 보여지고 없으면 보여지지 않은 조건을 사용해 줘야 하기 때문에 div밖에서 selectedVideo에 대한 조건을 써줘야한다. */}
       {selectedVideo && (
       <div className={styles.detail} >
         {<VideoDetail video={selectedVideo}/>}
       </div>
       )}
+
       <div className={styles.list} >
         <VideoList 
         videos={videos} 
