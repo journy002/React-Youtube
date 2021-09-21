@@ -8,21 +8,20 @@ class Youtube {
         }
     }
 
-    mostPopular() {
+    async mostPopular() {
         // fetch를 하고 then then then 하면 최종적으로 promise가 만들어 지고 promise를 리턴한다
-       return fetch(
-        `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=25&key=${this.key}`,
-        this.getRequestOptions
-        )
-    
-        .then(response => response.json()) // respone(반응)을 텍스트로 변환시킨다 라는 의미(처음에 가져왔을때) response.text -> response.json 으로 바꿔 주는게 더 편함
-        .then(result => result.items) // 변환된 텍스트를 콘솔에 출력하고
+       const response = await fetch(
+            `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=25&key=${this.key}`,
+            this.getRequestOptions
+        );
+        const result = await response.json();
+        return result.items; // 변환된 텍스트를 콘솔에 출력하고
     }
 
-    search(query) {
-        return fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=${query}&type=video&key=${this.key}`, this.getRequestOptions)
-        .then(response => response.json())
-        .then(result => result.items.map(item => ({...item, id: item.id.videoId}) ))
+    async search(query) {
+        const response = await fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=${query}&type=video&key=${this.key}`, this.getRequestOptions);
+        const result = await response.json();
+        return result.items.map(item => ({ ...item, id: item.id.videoId }));
         // .then(items => setVideos(items))
         // .catch(error => console.log('error', error))
     }
